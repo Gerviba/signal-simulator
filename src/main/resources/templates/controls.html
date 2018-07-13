@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>Simulator WebUI</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="author" content="Szabó Gergely (Gerviba)" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="robots" content="index, follow">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/webui/style.css}" type="text/css" media="all" />
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="menu">
+			<h1>Simulator</h1>
+			<h2>MODE: <span th:text="${mode}">MASTER</span></h2>
+			<nav>
+				<a th:href="@{/webui/}"><i class="material-icons">dashboard</i> <span>Dashboard</span></a> 
+				<a th:href="@{/webui/settings}"><i class="material-icons">settings</i> <span>Settings</span></a> 
+				<a th:href="@{/webui/controls}"><i class="material-icons">tune</i> <span>Controls</span></a> 
+				<a th:href="@{/webui/cluster}" th:if="${mode} == 'MASTER'"><i class="material-icons">storage</i> <span>Cluster</span></a>
+			</nav>
+		</div>
+		<div class="content">
+			<h1>Controls</h1>
+			
+			<h2>Input Source</h2>
+			<table>
+				<tr>
+					<th>Setting</th>
+					<th>Value</th>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td th:text="${inputSource}"></td>
+				</tr>
+				<tr>
+					<td>Running</td>
+					<td th:text="${running} ? 'ON' : 'OFF'"></td>
+				</tr>
+				<tr>
+					<td>Action</td>
+					<td>
+						<form action="#" th:action="${running} ? @{/webui/controls/stop} : @{/webui/controls/start}" method="post">
+							<input type="submit" value="Start" th:value="${running} ? 'Stop' : 'Start'" />
+						</form>
+					</td>
+				</tr>
+			</table>
+
+		</div>
+	</div>
+</body>
+</html>

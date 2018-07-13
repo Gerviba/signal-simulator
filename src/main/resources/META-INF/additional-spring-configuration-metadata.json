@@ -1,0 +1,97 @@
+{"properties": [
+  {
+    "name": "simulator.config-file",
+    "type": "java.lang.String",
+    "description": "Name of the config file to load vehicles"
+  },
+  {
+    "name": "simulator.input-source-class",
+    "type": "java.lang.String",
+    "description": "Input generator class name"
+  },
+  {
+    "name": "simulator.transporter-class",
+    "type": "java.lang.String",
+    "description": "Transporter class name"
+  },
+  {
+    "name": "simulator.slaves",
+    "type": "java.lang.String",
+    "description": "List of slaves"
+  },
+  {
+    "name": "simulator.api-key",
+    "type": "java.lang.String",
+    "description": "API key. Used in master-slave communication"
+  },
+  {
+    "name": "simulator.http.host",
+    "type": "java.lang.String",
+    "description": "Remote hostname. For example: 127.0.0.1 or google.com"
+  },
+  {
+    "name": "simulator.http.port",
+    "type": "java.lang.Integer",
+    "description": "Remote port. 0-65535"
+  },
+  {
+    "name": "simulator.http.method",
+    "type": "java.lang.String",
+    "description": "HTTP method. GET, POST, PUT, DELETE"
+  },
+  {
+    "name": "simulator.http.action",
+    "type": "java.lang.String",
+    "description": "Remote path"
+  },
+  {
+    "name": "simulator.http.basic-enabled",
+    "type": "java.lang.Boolean",
+    "description": "HTTP basic authentication enabled"
+  },
+  {
+    "name": "simulator.http.basic-username",
+    "type": "java.lang.String",
+    "description": "HTTP basic authentication username"
+  },
+  {
+    "name": "simulator.http.basic-password",
+    "type": "java.lang.String",
+    "description": "HTTP basic authentication password"
+  },
+  {
+    "name": "simulator.mqtt.host",
+    "type": "java.lang.String",
+    "description": "MQTT remote host"
+  },
+  {
+    "name": "simulator.mqtt.port",
+    "type": "java.lang.String",
+    "description": "MQTT remote port"
+  },
+  {
+    "name": "simulator.mqtt.keep-alive",
+    "type": "java.lang.String",
+    "description": "MQTT keep-alive time"
+  },
+  {
+    "name": "simulator.mqtt.id",
+    "type": "java.lang.String",
+    "description": "MQTT client id"
+  },
+  {
+    "name": "simulator.mqtt.topic",
+    "type": "java.lang.String",
+    "description": "MQTT topic to publish"
+  },
+  {
+    "name": "simulator.mqtt.username",
+    "type": "java.lang.String",
+    "description": "MQTT username. Authentication disabled if empty."
+  },
+  {
+    "name": "simulator.mqtt.password",
+    "type": "java.lang.String",
+    "description": "MQTT password"
+  }
+]}

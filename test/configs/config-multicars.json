@@ -1,0 +1,135 @@
+[
+	{
+		"vehicleType": "MyFavouriteVehicleType",
+		"frames": [
+			{
+				"name": "VehicleStatus",
+				"frameID": 1,
+				"period": 1000,
+				"signals": [
+					{
+						"name": "EngineRPM",
+						"position": 0,
+						"length": 16
+					},
+					{
+						"name": "EngineTemperature",
+						"position": 16,
+						"length": 8
+					},
+					{
+						"name": "VehicleSpeed",
+						"position": 24,
+						"length": 12
+					},
+					{
+						"name": "IgnitionStatus",
+						"position": 36,
+						"length": 1
+					},
+					{
+						"name": "Gear",
+						"position": 37,
+						"length": 3
+					}
+				]
+			},
+			{
+				"name": "ESPStatus",
+				"frameID": 20,
+				"period": 10,
+				"signals": [
+					{
+						"name": "BrakeForceRR",
+						"position": 0,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceRL",
+						"position": 12,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceFR",
+						"position": 24,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceFL",
+						"position": 36,
+						"length": 12
+					}
+				]
+			}
+		]
+	},
+	{
+		"vehicleType": "MyHatedVehicleType",
+		"frames": [
+			{
+				"name": "VehicleStatus",
+				"frameID": 1,
+				"period": 1000,
+				"signals": [
+					{
+						"name": "EngineRPM",
+						"position": 0,
+						"length": 16
+					},
+					{
+						"name": "EngineTemperature",
+						"position": 16,
+						"length": 8
+					},
+					{
+						"name": "VehicleSpeed",
+						"position": 24,
+						"length": 12
+					},
+					{
+						"name": "IgnitionStatus",
+						"position": 36,
+						"length": 1
+					},
+					{
+						"name": "Gear",
+						"position": 37,
+						"length": 3
+					},
+					{
+						"name": "Coolness",
+						"position": 40,
+						"length": 8
+					}
+				]
+			},
+			{
+				"name": "ESPStatus",
+				"frameID": 20,
+				"period": 10,
+				"signals": [
+					{
+						"name": "BrakeForceRR",
+						"position": 0,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceRL",
+						"position": 12,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceFR",
+						"position": 24,
+						"length": 12
+					},
+					{
+						"name": "BrakeForceFL",
+						"position": 36,
+						"length": 12
+					}
+				]
+			}
+		]
+	}
+]

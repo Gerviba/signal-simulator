@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>Simulator WebUI</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="author" content="Szabó Gergely (Gerviba)" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<meta name="robots" content="index, follow">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" th:href="@{/webui/style.css}" type="text/css" media="all" />
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+	crossorigin="anonymous"></script>
+<script th:inline="javascript">
+	var lastTimeSuccess = /*[[${allSuccess}]]*/ 0;
+	var lastTimeFailed = /*[[${allFailed}]]*/ 0;
+	
+	function updateStats() {
+		$.ajax({
+			url : /*[[@{/api/status/all}]]*/ "/api/status/all",
+			cache : false
+		}).done(function(data) {
+			$("#all-success").text(data.success);
+			$("#stat-success").text(data.success - lastTimeSuccess);
+			lastTimeSuccess = data.success;
+			
+			$("#all-failed").text(data.failed);
+			$("#stat-failed").text(data.failed - lastTimeFailed);
+			lastTimeFailed = data.failed;
+			
+			$("#stat-slaves").text(data.slaves);
+			$("#stat-vehicles").text(data.vehicles);
+			$("#stat-memory").text(((data.maxMemory - data.freeMemory) / 1024).toFixed(0) + " KB (" 
+						+ (((data.maxMemory - data.freeMemory) / data.maxMemory) * 100).toFixed(0) + "%)");
+			$("#stat-running").text(data.running ? 'ON' : 'OFF');
+		});
+	}
+	
+	$(function() {
+		updateStats();
+	    setInterval(updateStats, 1000);
+	});
+</script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="menu">
+			<h1>Simulator</h1>
+			<h2>MODE: <span th:text="${mode}">MASTER</span></h2>
+			<nav>
+				<a th:href="@{/webui/}"><i class="material-icons">dashboard</i> <span>Dashboard</span></a> 
+				<a th:href="@{/webui/settings}"><i class="material-icons">settings</i> <span>Settings</span></a> 
+				<a th:href="@{/webui/controls}"><i class="material-icons">tune</i> <span>Controls</span></a> 
+				<a th:href="@{/webui/cluster}" th:if="${mode} == 'MASTER'"><i class="material-icons">storage</i> <span>Cluster</span></a>
+			</nav>
+		</div>
+		<div class="content">
+			<h1>Dashboard</h1>
+			
+			<h2>Settings</h2>
+			<table>
+				<tr>
+					<th>Setting</th>
+					<th>Value</th>
+				</tr>
+				<tr>
+					<td>Mode</td>
+					<td th:text="${mode}"></td>
+				</tr>
+				<tr>
+					<td>Active profiles</td>
+					<td th:text="${profiles}"></td>
+				</tr>
+				<tr>
+					<td>Config file</td>
+					<td th:text="${configfile}"></td>
+				</tr>
+				<tr>
+					<td>Input source</td>
+					<td><ins th:text="${inputsource}"></ins></td>
+				</tr>
+				<tr>
+					<td>Transport</td>
+					<td><ins th:text="${transporter}"></ins></td>
+				</tr>
+			</table>
+			
+			<h2>Statistics</h2>
+			<table>
+				<tr>
+					<th>Realtime (last second)</th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Sent packet(s)</td>
+					<td id="stat-success">-</td>
+				</tr>
+				<tr>
+					<td>Failed packet(s)</td>
+					<td id="stat-failed">-</td>
+				</tr>
+				<tr>
+					<td>Vehicle count</td>
+					<td id="stat-vehicles">-</td>
+				</tr>
+				<tr>
+					<td>Slaves connected</td>
+					<td id="stat-slaves">-</td>
+				</tr>
+				<tr>
+					<td>Memory usage</td>
+					<td id="stat-memory">-</td>
+				</tr>
+				<tr>
+					<td>Input source</td>
+					<td id="stat-running">-</td>
+				</tr>
+			</table>
+			
+			<table>
+				<tr>
+					<th>All</th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>Sent packet(s)</td>
+					<td th:text="${allSuccess}" id="all-success">0</td>
+				</tr>
+				<tr>
+					<td>Failed packet(s)</td>
+					<td th:text="${allFailed}" id="all-failed">0</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
