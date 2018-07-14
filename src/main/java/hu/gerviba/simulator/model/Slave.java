@@ -65,10 +65,16 @@ public class Slave {
         this.rangeEnd.set(rangeEnd);
     }
 
-    public void setAvailable(boolean available) {
-        this.available.set(available);
-        if (available)
+    public boolean changeAvailable(boolean available) {
+        if (available) {
             this.lastUpdated.set(System.currentTimeMillis());
+        } else {
+            this.success.set(0);
+            this.failed.set(0);
+        }
+        boolean old = this.available.get();
+        this.available.set(available);
+        return this.available.get() != old;
     }
 
     public void setRunning(boolean running) {
@@ -90,5 +96,10 @@ public class Slave {
     public void setRangeEnd(long rangeEnd) {
         this.rangeEnd.set(rangeEnd);
     }
+
+    public void setCount(long count) {
+        this.count.set(count);
+    }
+    
     
 }

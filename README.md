@@ -9,7 +9,7 @@ A solution by [Szabó Gergely](https://github.com/Gerviba).
 - Show in the IDE: You need to have [Lombok](https://projectlombok.org/setup/eclipse) installed.
 - Build: `$ mvn clean install`
 - Test: `$ mvn test`
-- Setup: The compiled jar file is executable. (Thanks to spring-boot)
+- Setup: The compiled jar file is executable. (Thanks to spring-boot) It can also be used as a web archive (.war file). 
 
 `java -Xmx<memory>M -Dspring.profiles.active=<mode> -jar simulator-<version>.jar`
 
@@ -25,6 +25,8 @@ Custom config files are available for every profiles.
 Any configuration property can be set using the `-D<property.name>=` command line argument.
 
 All of the custom properties are documented. See `src/main/resources/META-INF/additional-spring-configuration-metadata.json` file for more.
+
+**NOTE**: Slave nodes must be configured with the same **input source**, **protocol JSON** and **transporter** properties to work as expected.
 
 ### Protocol JSON
 
@@ -43,8 +45,8 @@ All of the custom properties are documented. See `src/main/resources/META-INF/ad
 ```
 
 - `VehicleType`, `Frame` and `Signal` is located in the `hu.gerviba.simulator.model` package.
-- numbers are integers (max 8 byte)
-- For examples see: `test/configs/` folder
+- Numbers are integers (max 8 byte)
+- Examples: `test/configs/` folder
 - Use `simulator.config-file` property in the properties file or the `-Dsimulator.config-file=` command line argument to specify the protocol json.
 
 ## Profiles (Modes)
@@ -103,9 +105,9 @@ simulator.http.basic-username=username
 simulator.http.basic-password=password
 ```
 
-HTTP and HTTPS are also supported.
+Both HTTP and HTTPS are supported.
 
-I wrote a simple PHP page to test the class:
+I wrote a simple PHP script to test the class:
 
 ```PHP
 <?php
@@ -131,9 +133,11 @@ simulator.mqtt.username=testu
 simulator.mqtt.password=testp
 ```
 
-If you leave the username empty, authentication will be disabled.
+- If you leave the username empty, authentication will be disabled.
 
-Currently only QoS=0 supported.
+- Currently only QoS=0 supported.
+
+- [MQTT documentation](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csd02/mqtt-v3.1.1-csd02.html)
 
 ### Debugging
 
@@ -159,7 +163,7 @@ To enable: use profile `master`
 
 |Method|Path|Arguments|Description|
 |:----:|----|---------|-----------|
-| GET  |`/api/status/server`| *none* |Returns server status. Used in dashboard.|
+| GET  |`/api/status/server`| *none* |Returns server status. Used in WebUI dashboard.|
 | GET  |`/api/inputgenerator/start`| *none* |Starts the input generator.|
 | GET  |`/api/inputgenerator/stop`| *none* |Stops the input generator.|
 | GET  |`/api/cluster/start`| *none* |Sends start signals to slaves.|
@@ -205,11 +209,25 @@ To enable: use profile `standalone` or `master`.<br>
 | POST |`/webui/controls/stop`| *none* |It will call the InputSource instance's `stop()` method.|
 | GET  |`/webui/controls/status`| *none* |It will call the InputSource instance's isRunning() method. Results: `{'status':'ON' / 'OFF'}`|
 
+## Known security issues
+
+### Issues
+
+- Using transporters (HTTPTransporter, MQTTTransporter) without ssl is dangerous.
+- The WebUI and a RestAPI (in `standalone` and `master` instances) can be used without authentication.
+- The slave apiKey can be easily stolen via man-in-the-middle attacks.
+
+### Solutions
+
+- Use HTTPS whenever it's possible.
+- Block unnecessary port traffic.
+- Use VPNs for remote hosts.
+
 ## Todo
 
 - Total control over slaves
-- Ajax webUI (cluster)
 - More unit tests
+- HTTP Response std out rm
 - Docs
 - Integration tests
 - Docs: security issue

@@ -18,7 +18,9 @@ import hu.gerviba.simulator.dao.MasterSlaveCommand;
 import hu.gerviba.simulator.dao.SlaveStatusResponse;
 import hu.gerviba.simulator.dao.StatusResponse;
 import hu.gerviba.simulator.input.InputSource;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Profile({"slave", "test"})
 @RestController
 @RequestMapping("/api/slave")
@@ -38,8 +40,11 @@ public class SlaveCommandsController {
     
     @GetMapping("/status")
     SlaveStatusResponse status(String apiKey) {
-        if (!validApiKey.equals(apiKey))
+        if (!validApiKey.equals(apiKey)){
+            log.info("Invalid API key (status query)");
             return new SlaveStatusResponse(false, "Invalid API-KEY", 0, 0);
+        }
+        
         return new SlaveStatusResponse(input.isRunning(), "OK", 
                 readAppContextLong("success"),
                 readAppContextLong("failed"));
@@ -47,8 +52,12 @@ public class SlaveCommandsController {
     
     @PostMapping("/start")
     StatusResponse start(String apiKey, @RequestBody MasterSlaveCommand command) {
-        if (!validApiKey.equals(apiKey))
+        log.info("Received START packet");
+        if (!validApiKey.equals(apiKey)) {
+            log.info("Invalid API key");
             return new StatusResponse("INVALID-API-KEY");
+        }
+        log.info(command.toString());
             
         if (input.isRunning())
             input.stop();
@@ -60,15 +69,18 @@ public class SlaveCommandsController {
             storage.getVehicleByName(k).setCount(v));
         storage.setRanges();
 
-        if (command.getIdFrom() > 0)
+        if (command.getIdFrom() >= 0)
             input.start();
         return new StatusResponse("OK");
     }
     
     @PostMapping("/stop")
     StatusResponse stop(String apiKey) {
-        if (!validApiKey.equals(apiKey))
+        log.info("Received STOP packet");
+        if (!validApiKey.equals(apiKey)) {
+            log.info("Invalid API key");
             return new StatusResponse("INVALID-API-KEY");
+        }
         
         input.stop();
         return new StatusResponse("OK");

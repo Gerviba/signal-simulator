@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.gerviba.simulator.dao.StatusResponse;
 import hu.gerviba.simulator.input.InputSource;
 import hu.gerviba.simulator.service.ClusterService;
+import lombok.extern.slf4j.Slf4j;
 
-@RequestMapping("/api")
+@Slf4j
 @RestController
+@RequestMapping("/api")
 public class ConfigurationController {
 
     @Autowired
@@ -32,6 +34,7 @@ public class ConfigurationController {
     StatusResponse startInputGenerator() {
         if (app.getAttribute("mode").equals("MASTER"))
             return new StatusResponse("UNSUPPORTED-OPERATION");
+        log.info("Starting input generator");
         input.start();
         return new StatusResponse("OK");
     }
@@ -40,6 +43,7 @@ public class ConfigurationController {
     StatusResponse stopInputGenerator() {
         if (app.getAttribute("mode").equals("MASTER"))
             return new StatusResponse("UNSUPPORTED-OPERATION");
+        log.info("Stopping input generator");
         input.stop();
         return new StatusResponse("OK");
     }

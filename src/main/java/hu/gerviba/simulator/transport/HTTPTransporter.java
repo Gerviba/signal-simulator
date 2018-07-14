@@ -7,9 +7,7 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.Channels;
 import java.nio.channels.CompletionHandler;
-import java.nio.channels.WritableByteChannel;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
@@ -21,10 +19,13 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Based on: https://examples.javacodegeeks.com/core-java/nio/java-nio-async-http-client-example/
  * @author gerviba
  */
+@Slf4j
 public class HTTPTransporter implements Transporter {
 
     public static final String HEADERS_TEMPLATE = 
@@ -68,10 +69,11 @@ public class HTTPTransporter implements Transporter {
     String password;
     
     private String headers;
-    private AsynchronousChannelGroup asynchronousChannelGroup;
+    private AsynchronousChannelGroup asyncChannelGroup;
     
     @PostConstruct
     void init() throws IOException {
+        log.info("Transporter: HTTPTransporter");
         if (basicAuthEnabled) {
             headers = String.format(HTTPTransporter.HEADERS_TEMPLATE_BASICAUTH, 
                     method, action, "%s", 
@@ -81,7 +83,7 @@ public class HTTPTransporter implements Transporter {
             headers = String.format(HTTPTransporter.HEADERS_TEMPLATE, method, action, "%s", host);
         }
         
-        asynchronousChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(2, Executors.defaultThreadFactory());
+        asyncChannelGroup = AsynchronousChannelGroup.withFixedThreadPool(2, Executors.defaultThreadFactory());
         
         if (action.startsWith("/"))
             action = action.substring(1);
@@ -92,7 +94,6 @@ public class HTTPTransporter implements Transporter {
         try {
             Optional<ByteBuffer> data = Optional.of(ByteBuffer.wrap(rawData));
             
-            WritableByteChannel target = Channels.newChannel(System.out);
             AtomicBoolean pass = new AtomicBoolean(true);
             CountDownLatch latch = new CountDownLatch(1);
             
@@ -101,9 +102,9 @@ public class HTTPTransporter implements Transporter {
                     buffer.flip();
     
                     while (buffer.hasRemaining()) {
-                        target.write(buffer);
+                        buffer.get();
                     }
-                } catch (IOException e) {
+                } catch (Exception e) {
                     pass.set(false);
                 } finally {
                     latch.countDown();
@@ -133,14 +134,14 @@ public class HTTPTransporter implements Transporter {
         
         SocketAddress serverAddress = new InetSocketAddress(host, port);
         RequestHandler handler = new RequestHandler(
-                AsynchronousSocketChannel.open(asynchronousChannelGroup), 
+                AsynchronousSocketChannel.open(asyncChannelGroup), 
                 success, failure);
         
-        doConnect(handler, serverAddress, 
+        connect(handler, serverAddress, 
                 ByteBuffer.wrap(String.format(headers, rawData.length).getBytes()), data);
     }
     
-    private void doConnect(RequestHandler handler, SocketAddress address,
+    private void connect(RequestHandler handler, SocketAddress address,
             ByteBuffer headers, Optional<ByteBuffer> body) {
 
         handler.getChannel().connect(address, null, new CompletionHandler<Void, Void>() {
@@ -159,6 +160,9 @@ public class HTTPTransporter implements Transporter {
     
 }
 
+/**
+ * @author https://examples.javacodegeeks.com/core-java/nio/java-nio-async-http-client-example/
+ */
 final class RequestHandler {
 
     private final AsynchronousSocketChannel channel;

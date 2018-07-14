@@ -8,11 +8,14 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * MQTT Transporter
  * @docs http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csd02/mqtt-v3.1.1-csd02.html
  * @author gerviba
  */
+@Slf4j
 public class MQTTTransporter implements Transporter {
 
     private static final byte PACKET_TYPE_CONNECT = 0x10;
@@ -50,6 +53,7 @@ public class MQTTTransporter implements Transporter {
     
     @PostConstruct
     void init() {
+        log.info("Transporter: MQTTTransporter");
         keepAliveBytes[0] = getShortMSB(keepAlive);
         keepAliveBytes[1] = getShortLSB(keepAlive);
     }

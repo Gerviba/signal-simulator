@@ -21,7 +21,9 @@ import hu.gerviba.simulator.service.InputProcessorService;
 import hu.gerviba.simulator.service.SchedulerService;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class RandomInputGenerator implements InputSource {
 
     static final class RandomSignalGenerator {
@@ -91,9 +93,10 @@ public class RandomInputGenerator implements InputSource {
     
     public RandomInputGenerator() {}
 
-    @Override
     @PostConstruct
+    @Override
     public void init() {
+        log.info("Input source: RandomFlowInputGenerator");
     }
 
     @PreDestroy

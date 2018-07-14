@@ -10,6 +10,8 @@
 <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=latin-ext" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" th:href="@{/webui/style.css}" type="text/css" media="all" />
+<meta name="msapplication-TileColor" content="#153243">
+<meta name="theme-color" content="#153243">
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
 	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
 	crossorigin="anonymous"></script>
@@ -23,11 +25,17 @@
 			cache : false
 		}).done(function(data) {
 			$("#all-success").text(data.success);
-			$("#stat-success").text(data.success - lastTimeSuccess);
+			if (data.success - lastTimeSuccess < 0)
+				$("#stat-success").text("RESTARTING");
+			else
+				$("#stat-success").text(data.success - lastTimeSuccess);
 			lastTimeSuccess = data.success;
 			
 			$("#all-failed").text(data.failed);
-			$("#stat-failed").text(data.failed - lastTimeFailed);
+			if (data.failed - lastTimeFailed < 0)
+				$("#stat-success").text("RESTARTING");
+			else
+				$("#stat-failed").text(data.failed - lastTimeFailed);
 			lastTimeFailed = data.failed;
 			
 			$("#stat-slaves").text(data.slaves);
@@ -95,7 +103,7 @@
 					<th></th>
 				</tr>
 				<tr>
-					<td>Sent packet(s)</td>
+					<td>Successful packet(s)</td>
 					<td id="stat-success">-</td>
 				</tr>
 				<tr>
@@ -130,7 +138,7 @@
 					<th></th>
 				</tr>
 				<tr>
-					<td>Sent packet(s)</td>
+					<td>Successful packet(s)</td>
 					<td th:text="${allSuccess}" id="all-success">0</td>
 				</tr>
 				<tr>

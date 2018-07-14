@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 @DisplayName("MQTT Transporter")
 public class MQTTTransporterTest {
 
-    // https://www.ibm.com/developerworks/community/blogs/messaging/entry/write_your_own_mqtt_client_without_using_any_api_in_minutes1?lang=en
     @Test
     @DisplayName("Publishing")
     void testPublish() throws Exception {

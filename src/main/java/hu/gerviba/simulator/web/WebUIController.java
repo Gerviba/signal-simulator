@@ -1,7 +1,5 @@
 package hu.gerviba.simulator.web;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -18,11 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hu.gerviba.simulator.config.VehicleStorage;
-import hu.gerviba.simulator.dao.StatusResponse;
 import hu.gerviba.simulator.input.InputSource;
 import hu.gerviba.simulator.model.VehicleType;
 import hu.gerviba.simulator.service.ClusterService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @Profile({"master", "standalone", "test"})
 @ConditionalOnProperty("simulator.enable-webui")
@@ -45,11 +44,7 @@ public class WebUIController {
 
     @PostConstruct
     void init() {
-        List<String> profile = Arrays.asList(env.getActiveProfiles());
-        app.setAttribute("mode", 
-                profile.contains("standalone") ? "STANDALONE" : 
-                profile.contains("master") ? "MASTER" : 
-                profile.contains("slave") ? "SLAVE" : "N/A");
+        log.info("WebUI: enabled");
     }
     
     @GetMapping("/")
@@ -98,6 +93,8 @@ public class WebUIController {
         model.put("mode", app.getAttribute("mode"));
         model.put("running", input.isRunning());
         model.put("inputSource", input.getClass().getSimpleName());
+        model.put("zeroVehicle", storage.getVehicles().stream()
+                .mapToLong(v -> v.getCount().get()).sum() == 0);
         return "controls";
     }
     
@@ -106,6 +103,7 @@ public class WebUIController {
     String startInputGenerator() {
         if (app.getAttribute("mode").equals("MASTER"))
             return "redirect:/webui/";
+        log.info("Starting input generator");
         input.start();
         return "redirect:/webui/controls";
     }
@@ -114,14 +112,9 @@ public class WebUIController {
     String stopInputGenerator() {
         if (app.getAttribute("mode").equals("MASTER"))
             return "redirect:/webui/";
+        log.info("Stopping input generator");
         input.stop();
         return "redirect:/webui/controls";
-    }
-    
-    @Profile("standalone")
-    @GetMapping("/webui/controls/status")
-    StatusResponse statusInputGenerator() {
-        return new StatusResponse(input.isRunning() ? "ON" : "OFF");
     }
     
     @GetMapping("/webui/cluster")
@@ -130,6 +123,8 @@ public class WebUIController {
             return "redirect:/webui/";
         model.put("mode", app.getAttribute("mode"));
         model.put("clusterRunning", cluster.isRunning());
+        model.put("zeroVehicle", storage.getVehicles().stream()
+                .mapToLong(v -> v.getCount().get()).sum() == 0);
         return "cluster";
     }
 

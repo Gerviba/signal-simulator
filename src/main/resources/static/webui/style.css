@@ -41,6 +41,20 @@ p ins {
 	height: 100vh;
 }
 
+.error {
+	background-color: #BB342F;
+	border-left: 8px solid #892623;
+	padding: 20px;
+	margin-bottom: 20px;
+	max-width: 572px;
+}
+
+.error a {
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
 .menu {
 	background-color: #153243;
 	width: 300px;
@@ -177,7 +191,7 @@ p ins {
 	background-color: #162836;
 }
 
-@media ( max-width : 950px) {
+@media (max-width : 950px) {
 	.menu {
 		width: 44px;
 		min-width: 44px;
@@ -196,7 +210,7 @@ p ins {
 	}
 }
 
-@media ( max-width : 380px) {
+@media (max-width : 380px) {
 	.content table tr th:nth-of-type(2),
 	.content table tr th:last-of-type {
 		display: none;

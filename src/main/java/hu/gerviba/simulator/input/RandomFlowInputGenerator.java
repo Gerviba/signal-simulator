@@ -7,12 +7,16 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+
 import hu.gerviba.simulator.model.Signal;
 import hu.gerviba.simulator.model.VehicleInstance;
 import hu.gerviba.simulator.model.VehicleType;
 import hu.gerviba.simulator.service.InputProcessorService;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class RandomFlowInputGenerator extends RandomInputGenerator implements InputSource {
 
     static final String DELTA_SUFFIX = "_delta";
@@ -98,6 +102,12 @@ public class RandomFlowInputGenerator extends RandomInputGenerator implements In
     }
     
     public RandomFlowInputGenerator() {}
+    
+    @PostConstruct
+    @Override
+    public void init() {
+        log.info("Input source: RandomFlowInputGenerator");
+    }
     
     @Override
     void generateInstances() {

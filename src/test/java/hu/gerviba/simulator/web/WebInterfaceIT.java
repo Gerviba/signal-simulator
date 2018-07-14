@@ -1,4 +1,4 @@
-package hu.gerviba.simulator;
+package hu.gerviba.simulator.web;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,10 +7,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SimulatorTests {
+public class WebInterfaceIT {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads() {
+    }
 
 }
+

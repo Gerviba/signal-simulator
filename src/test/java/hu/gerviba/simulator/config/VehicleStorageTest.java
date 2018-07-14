@@ -1,4 +1,4 @@
-package hu.gerviba.simulator.model;
+package hu.gerviba.simulator.config;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -2,6 +2,11 @@ package hu.gerviba.simulator.transport;
 
 import java.io.PrintStream;
 
+import javax.annotation.PostConstruct;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class DebugTransporter implements Transporter {
 
     private PrintStream ps;
@@ -19,6 +24,11 @@ public class DebugTransporter implements Transporter {
         return true;
     }
 
+    @PostConstruct
+    void init() {
+        log.info("Transporter: DebugTransporter");
+    }
+    
     public static void printByteArray(PrintStream ps, byte[] data) {
         ps.println("   | 76543210 | DEC\n"
                 + "---|----------|-----");
