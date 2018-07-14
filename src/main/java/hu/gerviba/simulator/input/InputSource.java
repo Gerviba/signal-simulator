@@ -1,15 +1,18 @@
 package hu.gerviba.simulator.input;
 
+import javax.annotation.PostConstruct;
+
 public interface InputSource {
 
-    void init();
+    @PostConstruct
+    public void init();
 
-    boolean isRunning();
+    public boolean isRunning();
 
-    void start();
+    public void start();
     
-    void stop();
+    public void stop();
 
-    void setScope(long fromId, long toId);
+    public void setScope(long fromId, long toId);
     
 }

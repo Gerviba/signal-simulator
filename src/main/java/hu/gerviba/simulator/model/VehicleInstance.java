@@ -20,7 +20,7 @@ public class VehicleInstance {
     
     private Map<Short, InputAssembler> assemblers = new HashMap<>();
     
-    private Map<String, AtomicLong> values = new HashMap<>();
+    private Map<String, AtomicLong> values;
     
     public VehicleInstance(byte[] vehicleId, VehicleType vehicleType) {
         this.vehicleId = vehicleId;
@@ -30,15 +30,19 @@ public class VehicleInstance {
                     frame.getSignals(), vehicleId, frame.getFrameID())));
     }
 
+    public void initVariables() {
+        values = new HashMap<>();
+    }
+    
     public InputAssembler getAssembler(short frameId) {
         return assemblers.get(frameId);
     }
     
-    public AtomicLong getVariable(Object key) {
+    public AtomicLong getVariable(String key) {
         return values.get(key);
     }
 
-    public AtomicLong setVariable(String key, AtomicLong value) {
+    public AtomicLong addVariable(String key, AtomicLong value) {
         return values.put(key, value);
     }
     

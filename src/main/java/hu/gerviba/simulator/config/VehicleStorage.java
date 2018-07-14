@@ -3,6 +3,7 @@ package hu.gerviba.simulator.config;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +27,7 @@ import lombok.ToString;
 public class VehicleStorage {
 
     @Getter
-    private List<VehicleType> vehicles = new ArrayList<>(1);
+    private List<VehicleType> vehicles = Collections.synchronizedList(new ArrayList<>(1));
     
     @Value("${simulator.config-file:config-example.json}")
     String defaultConfigFile;

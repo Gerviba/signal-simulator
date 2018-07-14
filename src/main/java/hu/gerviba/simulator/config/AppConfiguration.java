@@ -1,21 +1,20 @@
 package hu.gerviba.simulator.config;
 
-import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.web.client.RestTemplate;
 
 import hu.gerviba.simulator.input.InputSource;
 import hu.gerviba.simulator.transport.Transporter;
 
 @Configuration
 @EnableScheduling
+@EnableAsync
 public class AppConfiguration {
 
     @Value("${simulator.input-source-class:hu.gerviba.simulator.input.RandomInputGenerator}")
@@ -40,15 +39,14 @@ public class AppConfiguration {
                 .newInstance();
     }
     
-    @Autowired
-    ServletContext servletContext;
-    
-    @Autowired
-    Environment environment;
-    
     @Bean
     TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
+    }
+    
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
     
 }

@@ -93,5 +93,20 @@
     "name": "simulator.mqtt.password",
     "type": "java.lang.String",
     "description": "MQTT password"
+  },
+  {
+    "name": "simulator.enable-webui",
+    "type": "java.lang.Boolean",
+    "description": "Enable WebUI"
+  },
+  {
+    "name": "simulator.master-host",
+    "type": "java.lang.String",
+    "description": "Master node's hostname"
+  },
+  {
+    "name": "simulator.master-host",
+    "type": "java.lang.String",
+    "description": "Master node's port"    
   }
 ]}

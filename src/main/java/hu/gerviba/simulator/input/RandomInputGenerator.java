@@ -19,11 +19,12 @@ import hu.gerviba.simulator.model.VehicleInstance;
 import hu.gerviba.simulator.model.VehicleType;
 import hu.gerviba.simulator.service.InputProcessorService;
 import hu.gerviba.simulator.service.SchedulerService;
+import lombok.AccessLevel;
 import lombok.Getter;
 
 public class RandomInputGenerator implements InputSource {
 
-    final class RandomSignalGenerator {
+    static final class RandomSignalGenerator {
         
         @Getter
         private final Signal signal;
@@ -31,7 +32,7 @@ public class RandomInputGenerator implements InputSource {
         private final long mask;
         
         public RandomSignalGenerator(Signal signal, Random random) {
-            this.mask = 0x7FFFFFFFFFFFFFFFL >> (64 - signal.getLength());
+            this.mask = 0x7FFFFFFFFFFFFFFFL >> (63 - signal.getLength());
             this.signal = signal;
             this.random = random;
         }
@@ -42,7 +43,8 @@ public class RandomInputGenerator implements InputSource {
 
     }
     
-    final class GeneratorTask implements Runnable {
+    //TODO: Test
+    static final class GeneratorTask implements Runnable {
 
         private InputProcessorService inputProcessor;
         private List<VehicleInstance> vehicles = Collections.synchronizedList(new LinkedList<>());
@@ -50,11 +52,13 @@ public class RandomInputGenerator implements InputSource {
         private Random random = new Random();
         private List<RandomSignalGenerator> generators = new LinkedList<>();
         
-        GeneratorTask(VehicleType vt, short frameId, InputProcessorService inputProcessor, List<VehicleInstance> vehicles) {
+        GeneratorTask(VehicleType type, short frameId, InputProcessorService inputProcessor, 
+                List<VehicleInstance> vehicles) {
+            
             this.frameId = frameId;
             this.inputProcessor = inputProcessor;
             this.vehicles.addAll(vehicles);
-            vt.getFrame(frameId).getSignals()
+            type.getFrame(frameId).getSignals()
                     .forEach(sig -> generators.add(new RandomSignalGenerator(sig, random)));
         }
         
@@ -78,11 +82,12 @@ public class RandomInputGenerator implements InputSource {
     @Autowired
     InputProcessorService inputProcessor;
     
-    private AtomicBoolean running = new AtomicBoolean(false);
-    private List<VehicleInstance> vehicles = Collections.synchronizedList(new LinkedList<>());
-    private List<ScheduledFuture<?>> tasks;
-    private long fromId = 0;
-    private long toId = 0;
+    @Getter(AccessLevel.PROTECTED)
+    protected List<VehicleInstance> vehicles = Collections.synchronizedList(new LinkedList<>());
+    protected List<ScheduledFuture<?>> tasks;
+    protected AtomicBoolean running = new AtomicBoolean(false);
+    private long fromId = -1;
+    private long toId = -1;
     
     public RandomInputGenerator() {}
 
@@ -111,11 +116,10 @@ public class RandomInputGenerator implements InputSource {
     public void start() {
         running.set(true);
         generateInstances();
-        System.out.println(vehicles.size());
         startTasks();
     }
     
-    private void generateInstances() {
+    void generateInstances() {
         vehicles.clear();
         long currentId = fromId;
         int vehcileTypeId = 0;
@@ -137,7 +141,7 @@ public class RandomInputGenerator implements InputSource {
         }
     }
 
-    private void startTasks() {
+    void startTasks() {
         tasks = storage.getVehicles().stream()
                 .flatMap(x -> x.getFrames().stream())
                 .distinct()

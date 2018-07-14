@@ -29,7 +29,7 @@ public class MQTTTransporter implements Transporter {
     String host;
 
     @Value("${simulator.mqtt.port:1883}")
-    int port = 1883;
+    int port;
 
     @Value("${simulator.mqtt.id:unset-ud}")
     String clientId;

@@ -3,10 +3,10 @@ package hu.gerviba.simulator.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("master")
+@Profile("slave")
 @Configuration
-public class MasterConfiguration {
-    
+public class SlaveConfiguration {
+
     
     
 }

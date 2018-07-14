@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-public class ServerStatusDao {
+public class ServerStatusResponse {
 
     @Getter
     @Setter
@@ -35,6 +35,10 @@ public class ServerStatusDao {
     @Setter
     private boolean running;
     
-    public ServerStatusDao() {}
+    @Getter
+    @Setter
+    private boolean cluster;
+    
+    public ServerStatusResponse() {}
     
 }

@@ -18,13 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import hu.gerviba.simulator.config.VehicleStorage;
-import hu.gerviba.simulator.dao.StatusDao;
+import hu.gerviba.simulator.dao.StatusResponse;
 import hu.gerviba.simulator.input.InputSource;
 import hu.gerviba.simulator.model.VehicleType;
+import hu.gerviba.simulator.service.ClusterService;
 
+@Controller
 @Profile({"master", "standalone", "test"})
 @ConditionalOnProperty("simulator.enable-webui")
-@Controller
 public class WebUIController {
     
     @Autowired
@@ -38,6 +39,9 @@ public class WebUIController {
     
     @Autowired
     InputSource input;
+    
+    @Autowired(required = false)
+    ClusterService cluster;
 
     @PostConstruct
     void init() {
@@ -66,25 +70,11 @@ public class WebUIController {
     }
     
     @GetMapping("/webui/settings")
-    String cluster(Map<String, Object> model) {
+    String settings(Map<String, Object> model) {
         model.put("mode", app.getAttribute("mode"));
         model.put("vehicles", storage.getVehicles());
         return "settings";
     }
-
-    @GetMapping("/webui/controls")
-    String controls(Map<String, Object> model) {
-        model.put("mode", app.getAttribute("mode"));
-        model.put("running", input.isRunning());
-        model.put("inputSource", input.getClass().getSimpleName());
-        return "controls";
-    }
-    
-    @GetMapping("/webui/cluster")
-    String cluster() {
-        return "index";
-    }
-    
     @PostMapping("/webui/ranges")
     String setRange(@RequestParam String name, @RequestParam Long count) {
         VehicleType vehicle = storage.getVehicleByName(name);
@@ -101,21 +91,62 @@ public class WebUIController {
         return "redirect:/webui/settings";
     }
     
+    @GetMapping("/webui/controls")
+    String controls(Map<String, Object> model) {
+        if (app.getAttribute("mode").equals("MASTER"))
+            return "redirect:/webui/";
+        model.put("mode", app.getAttribute("mode"));
+        model.put("running", input.isRunning());
+        model.put("inputSource", input.getClass().getSimpleName());
+        return "controls";
+    }
+    
+
     @PostMapping("/webui/controls/start")
     String startInputGenerator() {
+        if (app.getAttribute("mode").equals("MASTER"))
+            return "redirect:/webui/";
         input.start();
         return "redirect:/webui/controls";
     }
-    
+
     @PostMapping("/webui/controls/stop")
     String stopInputGenerator() {
+        if (app.getAttribute("mode").equals("MASTER"))
+            return "redirect:/webui/";
         input.stop();
         return "redirect:/webui/controls";
     }
     
+    @Profile("standalone")
     @GetMapping("/webui/controls/status")
-    StatusDao statusInputGenerator() {
-        return new StatusDao(input.isRunning() ? "ON" : "OFF");
+    StatusResponse statusInputGenerator() {
+        return new StatusResponse(input.isRunning() ? "ON" : "OFF");
+    }
+    
+    @GetMapping("/webui/cluster")
+    String cluster(Map<String, Object> model) {
+        if (app.getAttribute("mode").equals("STANDALONE"))
+            return "redirect:/webui/";
+        model.put("mode", app.getAttribute("mode"));
+        model.put("clusterRunning", cluster.isRunning());
+        return "cluster";
+    }
+
+    @PostMapping("/webui/cluster/start")
+    String startCluster() {
+        if (app.getAttribute("mode").equals("STANDALONE"))
+            return "redirect:/webui/";
+        cluster.start();
+        return "redirect:/webui/cluster";
+    }
+
+    @PostMapping("/webui/cluster/stop")
+    String stopCluster() {
+        if (app.getAttribute("mode").equals("STANDALONE"))
+            return "redirect:/webui/";
+        cluster.stop();
+        return "redirect:/webui/cluster";
     }
     
     long readAppContextLong(String attributeName) {

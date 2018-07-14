@@ -125,7 +125,7 @@ p ins {
 	border-spacing: 0;
 	background-color: #244359;
 	margin-bottom: 40px;
-	max-width: 600px;
+	max-width: 620px;
 	width: 100%;
 }
 
@@ -147,6 +147,10 @@ p ins {
 .content table td ins {
 	text-decoration: none;
 	word-break: break-all;
+}
+
+.content table.wide {
+	max-width: 1000px;
 }
 
 .content input[type="number"] {

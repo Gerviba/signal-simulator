@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>hu.gerviba</groupId>
-	<artifactId>ipcamp.simulator</artifactId>
+	<artifactId>simulator</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>ipcamp.simulator</name>
+	<name>signal-simulator</name>
 	<description></description>
 
 	<parent>

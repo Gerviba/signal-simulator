@@ -3,15 +3,15 @@ package hu.gerviba.simulator.dao;
 import lombok.Getter;
 import lombok.Setter;
 
-public class StatusDao {
+public class StatusResponse {
 
     @Getter
     @Setter
     private String status;
 
-    public StatusDao() {}
+    public StatusResponse() {}
     
-    public StatusDao(String status) {
+    public StatusResponse(String status) {
         this.status = status;
     }
     

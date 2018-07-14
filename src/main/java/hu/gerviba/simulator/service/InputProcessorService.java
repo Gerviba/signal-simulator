@@ -26,7 +26,6 @@ public class InputProcessorService {
     }
     
     public void applyInput(byte[] data) {
-        System.out.println("Send");
         if (transporter.sendToCloud(data)) {
             ((AtomicLong) app.getAttribute("success")).incrementAndGet();
         } else {
