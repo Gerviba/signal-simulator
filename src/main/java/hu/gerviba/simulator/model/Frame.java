@@ -31,14 +31,6 @@ public class Frame {
     private VehicleType vehicleType;
     
     public Frame() {}
-
-    public Frame(String name, VehicleType vehicleType, short frameID, int period, List<Signal> signals) {
-        this.name = name;
-        this.vehicleType = vehicleType;
-        this.frameID = frameID;
-        this.period = period;
-        this.signals = signals;
-    }
     
     public void setSignals(List<Signal> signals) {
         this.signals = signals;

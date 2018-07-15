@@ -7,11 +7,12 @@ A solution by [Szabó Gergely](https://github.com/Gerviba).
 ## Build, test, setup
 
 - Show in the IDE: You need to have [Lombok](https://projectlombok.org/setup/eclipse) installed.
+- Requirements: Java 8+, Maven
 - Build: `$ mvn clean install`
 - Test: `$ mvn test`
 - Setup: The compiled jar file is executable. (Thanks to spring-boot) It can also be used as a web archive (.war file). 
 
-`java -Xmx<memory>M -Dspring.profiles.active=<mode> -jar simulator-<version>.jar`
+`$ java -Xmx<memory>M -Dspring.profiles.active=<mode> -jar simulator-<version>.jar`
 
 ## Configuration
 
@@ -26,7 +27,7 @@ Any configuration property can be set using the `-D<property.name>=` command lin
 
 All of the custom properties are documented. See `src/main/resources/META-INF/additional-spring-configuration-metadata.json` file for more.
 
-**NOTE**: Slave nodes must be configured with the same **input source**, **protocol JSON** and **transporter** properties to work as expected.
+**NOTE**: Slave nodes must be configured with the same **input source**, **protocol JSON** and **transporter** properties as the master to work properly.
 
 ### Protocol JSON
 
@@ -52,10 +53,10 @@ All of the custom properties are documented. See `src/main/resources/META-INF/ad
 ## Profiles (Modes)
 
 |Profile name|Description|
-|------------|-----------|
-|standalone|Simple behaviour.|
-|master|Accepts and discovers slaves. Manages the slave nodes.|
-|slave|Works as a slave node.|
+|-----------:|-----------|
+|`standalone`|Simple behaviour.|
+|`master`|Accepts and discovers slaves. Manages the slave nodes.|
+|`slave`|Works as a slave node.|
 
 #### How to set profiles?
 
@@ -110,7 +111,7 @@ Both HTTP and HTTPS are supported.
 I wrote a simple PHP script to test the class:
 
 ```PHP
-<?php
+<?php //name: /var/www/html/cloud/index.php
 	$data = file_get_contents("php://input");
 	foreach (str_split($data) as $part)
 		echo ord($part) . " ";
@@ -134,9 +135,8 @@ simulator.mqtt.password=testp
 ```
 
 - If you leave the username empty, authentication will be disabled.
-
 - Currently only QoS=0 supported.
-
+- I found [mosquitto](https://mosquitto.org/) very useful for testing.
 - [MQTT documentation](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csd02/mqtt-v3.1.1-csd02.html)
 
 ### Debugging
@@ -155,8 +155,6 @@ To enable: use profile `master`
 
 |Method|Path|Arguments|Description|
 |:----:|----|---------|-----------|
-| POST |`/api/slave`|`apiKey:String`, `port:Integer`|Registers slave node. Removed due to security reasons.|
-|DELETE|`/api/slave`|`apiKey:String`, `port:Integer`|Unregisters slave node. Removed due to security reasons.|
 | GET  |`/api/slaves`| *none* |Returns the list of all slaves|
 
 ### Master and Standalone
@@ -182,12 +180,12 @@ To enable: use profile `slave`
 ## WebUI
 
 To enable: use profile `standalone` or `master`.<br>
-**NOTE**: The config property `simulator.enable-webui` must be true.
+**NOTE**: Config property `simulator.enable-webui` must be true.
 
 #### Dependencies
 
 - JavaScript, JQuery : Client side
-- Google fonts, Google material icons : Client side
+- Google [fonts](https://fonts.google.com/), Google [material icons](https://material.io/tools/icons/?style=baseline) : Client side
 - Spring MVC, Thymeleaf : Server side
 
 #### Endpoints
@@ -198,20 +196,22 @@ To enable: use profile `standalone` or `master`.<br>
 | GET  |`/webui/`|WebUI dashboard, realtime statistics|
 | GET  |`/webui/controls`|Input generator (ON/OFF)|
 | GET  |`/webui/settings`|Vehicle count|
-| GET  |`/webui/cluster`|List and stats of slave nodes|
+| GET  |`/webui/cluster`|List of slave nodes|
 
-#### AJAX
+#### Form actions
 
 |Method|Path|Arguments|Description|
 |:----:|----|---------|-----------|
 | POST |`/webui/range`|`name:String`, `count:Long`|Set the count of the selected vehicle|
-| POST |`/webui/controls/start`| *none* |It will call the InputSource instance's `start()` method.|
-| POST |`/webui/controls/stop`| *none* |It will call the InputSource instance's `stop()` method.|
-| GET  |`/webui/controls/status`| *none* |It will call the InputSource instance's isRunning() method. Results: `{'status':'ON' / 'OFF'}`|
+| POST |`/webui/controls/start`| *none* |InputSource instance - `start()` method.|
+| POST |`/webui/controls/stop`| *none* |InputSource instance - `stop()` method.|
+| POST |`/webui/cluster/start`| *none* |ClusterService instance - `start()` method.|
+| POST |`/webui/cluster/stop`| *none* |ClusterService instance - `stop()` method.|
 
-## Known security issues
 
-### Issues
+## Security
+
+### Known security issues
 
 - Using transporters (HTTPTransporter, MQTTTransporter) without ssl is dangerous.
 - The WebUI and a RestAPI (in `standalone` and `master` instances) can be used without authentication.
@@ -222,14 +222,3 @@ To enable: use profile `standalone` or `master`.<br>
 - Use HTTPS whenever it's possible.
 - Block unnecessary port traffic.
 - Use VPNs for remote hosts.
-
-## Todo
-
-- Total control over slaves
-- More unit tests
-- HTTP Response std out rm
-- Docs
-- Integration tests
-- Docs: security issue
-- ~ Logging
-- ~ RestInputSource

@@ -123,7 +123,6 @@ public class MQTTTransporter implements Transporter {
             if (length == -1)
                 return false;
 
-//            System.out.println(Arrays.toString(buffer.array()));
             if (buffer.array()[0] == 0x20 && buffer.array()[2] == 0x00) {
                 if (!validate(buffer.array()[3]))
                     return false;

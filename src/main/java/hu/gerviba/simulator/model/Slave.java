@@ -52,19 +52,6 @@ public class Slave {
         this.key = key;
     }
 
-    public Slave(String host, String key, boolean available, boolean running, 
-            long success, long failed, long rangeStart, long rangeEnd) {
-        
-        this.host = host;
-        this.key = key;
-        this.available.set(available);
-        this.running.set(running);
-        this.success.set(success);
-        this.failed.set(failed);
-        this.rangeStart.set(rangeStart);
-        this.rangeEnd.set(rangeEnd);
-    }
-
     public boolean changeAvailable(boolean available) {
         if (available) {
             this.lastUpdated.set(System.currentTimeMillis());

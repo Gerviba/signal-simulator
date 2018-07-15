@@ -86,7 +86,7 @@ public class RandomInputGenerator implements InputSource {
     
     @Getter(AccessLevel.PROTECTED)
     protected List<VehicleInstance> vehicles = Collections.synchronizedList(new LinkedList<>());
-    protected List<ScheduledFuture<?>> tasks;
+    protected List<ScheduledFuture<?>> tasks = null;
     protected AtomicBoolean running = new AtomicBoolean(false);
     private long fromId = -1;
     private long toId = -1;
@@ -160,8 +160,11 @@ public class RandomInputGenerator implements InputSource {
     public void stop() {
         running.set(false);
         vehicles.clear();
+        if (tasks == null)
+            return;
         for (ScheduledFuture<?> task : tasks)
-            task.cancel(false);
+            if (task != null && !task.isDone())
+                task.cancel(false);
     }
 
 }

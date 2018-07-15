@@ -130,10 +130,6 @@ public class ClusterService {
         }
     });
     
-    Runnable queryForceStart = () -> {
-        
-    };
-    
     @PostConstruct
     public void init() {
         for (String slave : env.getProperty("simulator.slaves").split(";"))

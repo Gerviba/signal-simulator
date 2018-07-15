@@ -42,7 +42,7 @@ public class SlaveCommandsController {
     SlaveStatusResponse status(String apiKey) {
         if (!validApiKey.equals(apiKey)){
             log.info("Invalid API key (status query)");
-            return new SlaveStatusResponse(false, "Invalid API-KEY", 0, 0);
+            return new SlaveStatusResponse(false, "INVALID-API-KEY", 0, 0);
         }
         
         return new SlaveStatusResponse(input.isRunning(), "OK", 

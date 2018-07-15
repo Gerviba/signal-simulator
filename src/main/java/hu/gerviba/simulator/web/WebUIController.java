@@ -70,6 +70,7 @@ public class WebUIController {
         model.put("vehicles", storage.getVehicles());
         return "settings";
     }
+    
     @PostMapping("/webui/ranges")
     String setRange(@RequestParam String name, @RequestParam Long count) {
         VehicleType vehicle = storage.getVehicleByName(name);
@@ -98,7 +99,6 @@ public class WebUIController {
         return "controls";
     }
     
-
     @PostMapping("/webui/controls/start")
     String startInputGenerator() {
         if (app.getAttribute("mode").equals("MASTER"))

@@ -62,7 +62,7 @@
 			<h1>Cluster</h1>
 			
 			<div class="error" th:if="${zeroVehicle}">
-				<p>The vehicle count is currently zero. <a th:href="@{/webui/settings}">Settings</a></p>
+				<p>The vehicle count is currently zero. <a th:href="@{/webui/settings}">[Open Settings]</a></p>
 			</div>
 			
 			<h2>Slaves</h2>
@@ -110,6 +110,14 @@
 					<td>
 						<form action="#" th:action="@{/webui/cluster/stop}" method="post">
 							<input type="submit" value="!!!" />
+						</form>
+					</td>
+				</tr>
+				<tr th:if="${clusterRunning}">
+					<td>Restart</td>
+					<td>
+						<form action="#" th:action="@{/webui/cluster/start}" method="post">
+							<input type="submit" value="Restart" />
 						</form>
 					</td>
 				</tr>

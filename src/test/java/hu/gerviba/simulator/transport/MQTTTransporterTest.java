@@ -3,6 +3,7 @@ package hu.gerviba.simulator.transport;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 public class MQTTTransporterTest {
 
     @Test
+    @Disabled("It requires an MQTT broker")
     @DisplayName("Publishing")
     void testPublish() throws Exception {
         MQTTTransporter transporter = new MQTTTransporter();

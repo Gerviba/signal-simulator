@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class ConfigurationController {
+public class RestAPIController {
 
     @Autowired
     Environment env;
