@@ -16,6 +16,8 @@ A solution by [Szabó Gergely](https://github.com/Gerviba).
 
 ## Configuration
 
+![WebUI Config](https://raw.githubusercontent.com/Gerviba/signal-simulator/master/screenshots/1.png)
+
 ### Config files
 
 Custom config files are available for every profiles.
@@ -222,3 +224,12 @@ To enable: use profile `standalone` or `master`.<br>
 - Use HTTPS whenever it's possible.
 - Block unnecessary port traffic.
 - Use VPNs for remote hosts.
+
+## Screenshots
+
+![WebUI Dashboard](https://raw.githubusercontent.com/Gerviba/signal-simulator/master/screenshots/2.png)
+
+![WebUI Dashboard](https://raw.githubusercontent.com/Gerviba/signal-simulator/master/screenshots/3.png)
+
+![WebUI Dashboard](https://raw.githubusercontent.com/Gerviba/signal-simulator/master/screenshots/4.png)
+
